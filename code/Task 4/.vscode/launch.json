@@ -1,0 +1,27 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "DSLK.c",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "/home/phamhung/Documents/HUST Subject/Cấu trúc dữ liệu và thuật toán/code/Bài 4/DSLK",
+            "args": ["DSLK.c", "-std=c++11", "-g"],
+            "stopAtEntry": false,
+            "cwd": "/home/phamhung/Documents/HUST Subject/Cấu trúc dữ liệu và thuật toán/code/Bài 4",
+            "environment": [],
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        }
+    ]
+}
