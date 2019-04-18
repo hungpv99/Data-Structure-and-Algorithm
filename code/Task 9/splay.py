@@ -1,99 +1,132 @@
-class Node():
-    def __init__(self, key, left=None, right=None):
+class Node:
+    def __init__(self, key):
         self.key = key
-        self.left = left
-        self.right = right
+        self.left = self.right = None
 
-def rightRotate(x):
-    y = x.left
-    x.left = y.right
-    y.right = x
-    return y
+    def equals(self, node):
+        return self.key == node.key
 
-def leftRotate(x):
-    y = x.right
-    x.right = y.left
-    y.left = x
-    return x
+class SplayTree:
+    def __init__(self):
+        self.root = None
+        self.header = Node(None) #For splay()
 
-def splay(root, key):
-    if root == None or root.key == key:
-        return root
+    def insert(self, key):
+        if (self.root == None):
+            self.root = Node(key)
+            return
 
-    if root.key > key:
-        if root.left == None:
-            return root
-        if root.left.key > key:
-            root.left.left = splay(root.left.left, key)
-            root = rightRotate(root)
-        elif root.left.key < key:
-            root.left.right = splay(root.left.right, key)
-            if root.left.right != None:
-                root.left = leftRotate(root.left)
+        self.splay(key)
+        if self.root.key == key:
+            # If the key is already there in the tree, don't do anything.
+            return
 
-        if root.left == None:
-            return root
+        n = Node(key)
+        if key < self.root.key:
+            n.left = self.root.left
+            n.right = self.root
+            self.root.left = None
         else:
-            return rightRotate(root)
-    else:
-        if root.right == None:
-            return root
-        
-        if root.right.key > key:
-            root.right.left = splay(root.right.left, key)
+            n.right = self.root.right
+            n.left = self.root
+            self.root.right = None
+        self.root = n
 
-            if root.right.left != None:
-                root.right = rightRotate(root.right)
+    def remove(self, key):
+        self.splay(key)
+        if key != self.root.key:
+            raise 'key not found in tree'
 
-        elif root.right.key < key:
-            root.right.right = splay(root.right.right, key)
-            root = leftRotate(root)
-        
-        if root.right == None:
-            return root
+        # Now delete the root.
+        if self.root.left== None:
+            self.root = self.root.right
         else:
-            return leftRotate(root)
+            x = self.root.right
+            self.root = self.root.left
+            self.splay(key)
+            self.root.right = x
 
-def search(root, key):
-    return splay(root, key)
+    def findMin(self):
+        if self.root == None:
+            return None
+        x = self.root
+        while x.left != None:
+            x = x.left
+        self.splay(x.key)
+        return x.key
 
-def insert(root, k):
-    if root == None:
-        return Node(k)
+    def findMax(self):
+        if self.root == None:
+            return None
+        x = self.root
+        while (x.right != None):
+            x = x.right
+        self.splay(x.key)
+        return x.key
+
+    def find(self, key):
+        if self.root == None:
+            return None
+        self.splay(key)
+        if self.root.key != key:
+            return None
+        return self.root.key
+
+    def isEmpty(self):
+        return self.root == None
     
-    root = splay(root, k)
-
-    if(root.key == k):
-        return root
-
-    newNode = Node(k)
-
-    if root.key > k:
-        newNode.right = root
-        newNode.left = root.left
-        root.left = None
-    else:
-        newNode.left = root
-        newNode.right = root.right
-        root.right = None
+    def splay(self, key):
+        l = r = self.header
+        t = self.root
+        self.header.left = self.header.right = None
+        while True:
+            if key < t.key:
+                if t.left == None:
+                    break
+                if key < t.left.key:
+                    y = t.left
+                    t.left = y.right
+                    y.right = t
+                    t = y
+                    if t.left == None:
+                        break
+                r.left = t
+                r = t
+                t = t.left
+            elif key > t.key:
+                if t.right == None:
+                    break
+                if key > t.right.key:
+                    y = t.right
+                    t.right = y.left
+                    y.left = t
+                    t = y
+                    if t.right == None:
+                        break
+                l.right = t
+                l = t
+                t = t.right
+            else:
+                break
+        l.right = t.left
+        r.left = t.right
+        t.left = self.header.right
+        t.right = self.header.left
+        self.root = t
     
-    return newNode
+    def printTree(self, root):
+        if root != None:
+            print(str(root.key) + ' ')
+            self.printTree(root.left)
+            self.printTree(root.right)
 
-def preOrder(root):
-    if root != None:
-        print(str(root.key) + "  ")
-        preOrder(root.left)
-        preOrder(root.right)
 
 if __name__ == '__main__':
-    root = Node(100)
-    root.left = Node(50)
-    root.right = Node(200)
-    root.left.left = Node(40)
-    root.left.left.left = Node(30)
-    root.left.left.left.left = Node(20)
-
-    #root = search(root, 20)
-    root = insert(root, 25)
-    root = search(root, 200)
-    preOrder(root)
+    tree = SplayTree()
+    tree.insert(30)
+    tree.insert(40)
+    tree.insert(403)
+    tree.insert(240)
+    tree.insert(420)
+    tree.splay(40)
+    tree.printTree(tree.root)
