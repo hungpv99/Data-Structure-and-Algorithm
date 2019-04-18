@@ -110,11 +110,12 @@ def show(points, point_target, point_result=None):
     plt.show()  
 
 if __name__ == '__main__':
-    N = 10
+    N = 20
     B = 1000
     points = random_points(N, B)
     point_target = (randint(1, B),randint(1, B))
     tree = kdtree(points)
     best = kdtree_closest_point(tree, point_target)
     print(best_list)
+    print(points)
     show(points, point_target, best_list)
