@@ -1,5 +1,6 @@
 package views;
 
+import controller.AVLTree;
 import controller.Trie;
 import controller.TrieNode;
 
@@ -24,10 +25,10 @@ public class Ui extends JFrame {
 
 	JLabel lblSuggest;
 	JTextField txtInput;
+	JLabel lblResult;
 	Trie trieDic;
 	TrieNode rootDic;
-	Trie trieCur;
-	TrieNode rootCur;
+	AVLTree avlTree;
 
 	public Ui(String title) {
 		super(title);
@@ -35,26 +36,27 @@ public class Ui extends JFrame {
 		trieDic = new Trie();
 		rootDic = new TrieNode();
 		
-		trieCur = new Trie();
-		rootCur = new TrieNode();
 		
-		createTrieDic();
+		avlTree = new AVLTree();
+		
+		createTree();
 		addcontrol();
 		addEvent();
 	}
-	
-	private void createTrieDic() {
+
+	private void createTree() {
 		
 		FileReader fr = null;
 		BufferedReader br = null;
 		
 		try {
 			
-			fr = new FileReader(new File("dict_test.txt"));
+			fr = new FileReader(new File("dictionary.txt"));
 			br = new BufferedReader(fr);
 			String line;
 			while((line = br.readLine()) != null) {
-				trieDic.insert(line.trim(), rootDic);
+				avlTree.insert(line.substring(0,line.indexOf(" ")).trim(), line.substring(line.indexOf(" ")).trim());
+				trieDic.insert(line.substring(0,line.indexOf(" ")).trim(), rootDic);
 			}
 			
 		} catch (FileNotFoundException e) {
@@ -98,44 +100,20 @@ public class Ui extends JFrame {
 				String text[] = txtInput.getText().trim().split("\\s+");
 				System.out.println(text.length);
 				if(!text[0].equals("")) {
-					if(e.getKeyCode() == KeyEvent.VK_SPACE) {
-						trieCur.insert(text[text.length-1], rootCur);
+					trieDic.search(text[text.length-1], rootDic);
+					for(int i=0; i<trieDic.listWords.size(); i++) {
+						textSuggest += trieDic.listWords.get(i) + "  ";
 					}
-					else {
-						trieCur.search(text[text.length-1], rootCur);
-						
-						if(trieCur.listWords.size() >= 5) {
-							for(int i=0; i<5; i++) {
-								textSuggest += trieCur.listWords.get(i) + "  ";
-							}
-							
-						}
-						else {
-							
-							for(int i=0; i<trieCur.listWords.size(); i++) {
-								textSuggest += trieCur.listWords.get(i) + "  ";
-							}
-							
-							trieDic.search(text[text.length-1], rootDic);
-							
-							if(trieDic.listWords.size() >= 5) {
-								
-								for(int i = 0; i < 5; i++) {
-									textSuggest += trieDic.listWords.get(i) + "  ";
-								}
-							}
-							else {
-								for(int i=0; i<trieDic.listWords.size(); i++) {
-									textSuggest += trieDic.listWords.get(i) + "  ";
-								}
-							}
-						}
+					if(Trie.listWords.size() > 0 && text[text.length-1].equals(Trie.listWords.get(0))) {
+						lblResult.setText(text[text.length-1] + " : " + avlTree.search(text[text.length-1]));
+					}else {
+						lblResult.setText("Not matching...");
+					}
+
 						
 						lblSuggest.setText(textSuggest);
 						System.out.println(textSuggest);
-						System.out.println(trieCur.listWords.toString());
 						System.out.println(trieDic.listWords.toString());
-					}
 				}
 				
 			}
@@ -158,11 +136,14 @@ public class Ui extends JFrame {
 
 		lblSuggest = new JLabel("");
 		txtInput = new JTextField(50);
+		lblResult = new JLabel("");
 		
 		lblSuggest.setPreferredSize(txtInput.getPreferredSize());
+		lblResult.setPreferredSize(txtInput.getPreferredSize());
 
 		pnMain.add(lblSuggest);
 		pnMain.add(txtInput);
+		pnMain.add(lblResult);
 
 	}
 
