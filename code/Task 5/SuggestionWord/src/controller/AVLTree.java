@@ -35,25 +35,31 @@ public class AVLTree {
 
 	/* Function to insert data recursively */
 	private AVLNode insert(String key, String value, AVLNode t) {
-		if (t == null)
+		
+		if (t == null)  //if tree is empty, create new Node
 			t = new AVLNode(key, value);
-		else if (key.compareTo(t.key) < 0) {
+		
+		else if (key.compareTo(t.key) < 0) //if key lesser key in node t, add it on sub-left tree 
+		{
 			t.left = insert(key, value, t.left);
-			if (height(t.left) - height(t.right) == 2)
-				if (key.compareTo(t.left.key) < 0)
+			if (height(t.left) - height(t.right) == 2)  //check balance tree
+				if (key.compareTo(t.left.key) < 0)  //check case to rotate
 					t = rotateWithLeftChild(t);
 				else
 					t = doubleWithLeftChild(t);
-		} else if (key.compareTo(t.key) > 0) {
+		}
+		else if (key.compareTo(t.key) > 0) //if key more key in node t, add it on sub-right tree 
+		{
 			t.right = insert(key, value, t.right);
-			if (height(t.right) - height(t.left) == 2)
-				if (key.compareTo(t.right.key) > 0)
+			if (height(t.right) - height(t.left) == 2)  //check balance tree
+				if (key.compareTo(t.right.key) > 0)  //check case to rotate
 					t = rotateWithRightChild(t);
 				else
 					t = doubleWithRightChild(t);
-		} else
-			; // Duplicate; do nothing
-		t.height = max(height(t.left), height(t.right)) + 1;
+		}
+	
+		t.height = max(height(t.left), height(t.right)) + 1;  //increase height of tree
+		
 		return t;
 	}
 

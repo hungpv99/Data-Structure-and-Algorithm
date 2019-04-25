@@ -114,24 +114,17 @@ class SplayTree:
         t.right = self.header.left
         self.root = t
     
-    def printTree(self, root):
+    def printTree(self, root, direction):
         if root != None:
-            print(str(root.key) + ' ')
-            self.printTree(root.left)
-            self.printTree(root.right)
+            print(direction + ': ' +str(root.key) + ' ')
+            self.printTree(root.left, 'left')
+            self.printTree(root.right, 'right')
 
 
 if __name__ == '__main__':
     tree = SplayTree()
-    tree.insert(30)
-    tree.insert(40)
-    tree.insert(403)
-    tree.insert(240)
-    tree.insert(420)
-    tree.insert(534)
-    tree.insert(645)
-    tree.insert(543)
-    tree.insert(435)
-    tree.insert(345)
-    tree.insert(234)
-    tree.printTree(tree.root)
+    f = open('test.txt')
+    words = f.read().split(' ')
+    for word in words:
+        tree.insert(word)
+    tree.printTree(tree.root, 'root')

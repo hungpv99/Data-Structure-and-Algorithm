@@ -47,6 +47,7 @@ public class Trie {
 	private void getWords(TrieNode pCrawl, String word) {
 		if(listWords.size() >= 5)
 			return;
+		
 		if(pCrawl != null && pCrawl.isEndOfWord) {
 			listWords.add(word);
 		}
