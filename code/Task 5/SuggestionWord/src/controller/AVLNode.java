@@ -1,10 +1,12 @@
 package controller;
 
 public class AVLNode {
+	
 	AVLNode left, right;
 	String key;
 	String value;
 	int height;
+	
 	public AVLNode() {
 		super();
 		this.left = null;

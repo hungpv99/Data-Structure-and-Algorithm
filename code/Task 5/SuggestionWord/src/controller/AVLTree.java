@@ -3,37 +3,22 @@ package controller;
 public class AVLTree {
 	private AVLNode root;
 
-	/* Constructor */
 	public AVLTree() {
 		root = null;
 	}
 
-	/* Function to check if tree is empty */
-	public boolean isEmpty() {
-		return root == null;
-	}
-
-	/* Make the tree logically empty */
-	public void makeEmpty() {
-		root = null;
-	}
-
-	/* Function to insert data */
 	public void insert(String key, String value) {
 		root = insert(key, value, root);
 	}
 
-	/* Function to get height of node */
 	private int height(AVLNode t) {
 		return t == null ? -1 : t.height;
 	}
 
-	/* Function to max of left/right node */
 	private int max(int lhs, int rhs) {
 		return lhs > rhs ? lhs : rhs;
 	}
 
-	/* Function to insert data recursively */
 	private AVLNode insert(String key, String value, AVLNode t) {
 		
 		if (t == null)  //if tree is empty, create new Node
@@ -63,7 +48,6 @@ public class AVLTree {
 		return t;
 	}
 
-	/* Rotate binary tree node with left child */
 	private AVLNode rotateWithLeftChild(AVLNode k2) {
 		AVLNode k1 = k2.left;
 		k2.left = k1.right;
@@ -73,7 +57,6 @@ public class AVLTree {
 		return k1;
 	}
 
-	/* Rotate binary tree node with right child */
 	private AVLNode rotateWithRightChild(AVLNode k1) {
 		AVLNode k2 = k1.right;
 		k1.right = k2.left;
@@ -83,41 +66,16 @@ public class AVLTree {
 		return k2;
 	}
 
-	/**
-	 * Double rotate binary tree node: first left child with its right child; then
-	 * node k3 with new left child
-	 */
 	private AVLNode doubleWithLeftChild(AVLNode k3) {
 		k3.left = rotateWithRightChild(k3.left);
 		return rotateWithLeftChild(k3);
 	}
 
-	/**
-	 * Double rotate binary tree node: first right child with its left child; then
-	 * node k1 with new right child
-	 */
 	private AVLNode doubleWithRightChild(AVLNode k1) {
 		k1.right = rotateWithLeftChild(k1.right);
 		return rotateWithRightChild(k1);
 	}
 
-	/* Functions to count number of nodes */
-	public int countNodes() {
-		return countNodes(root);
-	}
-
-	private int countNodes(AVLNode r) {
-		if (r == null)
-			return 0;
-		else {
-			int l = 1;
-			l += countNodes(r.left);
-			l += countNodes(r.right);
-			return l;
-		}
-	}
-
-	/* Functions to search for an element */
 	public String search(String val) {
 		return search(root, val);
 	}
@@ -137,44 +95,5 @@ public class AVLTree {
 			found = search(r, val);
 		}
 		return found;
-	}
-
-	/* Function for inorder traversal */
-	public void inorder() {
-		inorder(root);
-	}
-
-	private void inorder(AVLNode r) {
-		if (r != null) {
-			inorder(r.left);
-			System.out.print(r.key + " ");
-			inorder(r.right);
-		}
-	}
-
-	/* Function for preorder traversal */
-	public void preorder() {
-		preorder(root);
-	}
-
-	private void preorder(AVLNode r) {
-		if (r != null) {
-			System.out.print(r.key + " ");
-			preorder(r.left);
-			preorder(r.right);
-		}
-	}
-
-	/* Function for postorder traversal */
-	public void postorder() {
-		postorder(root);
-	}
-
-	private void postorder(AVLNode r) {
-		if (r != null) {
-			postorder(r.left);
-			postorder(r.right);
-			System.out.print(r.key + " ");
-		}
 	}
 }

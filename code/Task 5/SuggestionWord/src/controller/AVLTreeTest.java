@@ -21,7 +21,6 @@ public class AVLTreeTest
        avlt.insert("need", "cần");
        avlt.insert("quit", "thoát");
        avlt.insert("yellow", "màu vàng");
-       avlt.inorder();
        System.out.println(avlt.search("jump"));
        
 //       System.out.println("AVLTree Tree Test\n");          

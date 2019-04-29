@@ -58,7 +58,7 @@ def add(point):
     if point not in best_list:
         best_list.append(point)
     best_list.sort()
-    if len(best_list) > 3:
+    if len(best_list) > 5:
         best_list.pop()
 
 def kdtree_closest_point(root, point_target, depth=0, k=2):
@@ -110,7 +110,7 @@ def show(points, point_target, point_result=None):
     plt.show()  
 
 if __name__ == '__main__':
-    N = 20
+    N = 50
     B = 1000
     points = random_points(N, B)
     point_target = (randint(1, B),randint(1, B))
